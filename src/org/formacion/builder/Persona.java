@@ -12,8 +12,15 @@ public class Persona {
 
 	@Override
 	public String toString(){
-			return getNombre() + ", Edad: " + getEdad() + " Municipio: " + getMunicipio() + ", Trabajo: "+
-			getLugarTrabajo();
+			String datosPersona = "";
+			if (getEdad() >= 18){
+				datosPersona = 	getNombre() + ", Edad: " + getEdad() + " Municipio: " + getMunicipio() + ", Trabajo: "+
+						getLugarTrabajo();
+			} else {
+				datosPersona = 	getNombre() + ", Edad: " + getEdad() + " Municipio: " + getMunicipio() + ", Colegio: "+
+						getColegio();
+			}
+		return datosPersona;
 	}
 
 	public String getNombre() {
@@ -77,12 +84,11 @@ public class Persona {
 			return new BuilderdMayor(persona);
 		}
 		
-		public Builder setMenor(int edad, String colegio) {
+		public BuilderMenor setMenor(int edad) {
 			if (edad >= 18) throw new IllegalArgumentException("es mayor de edad " + edad);
 			persona.edad = edad;
-			persona.colegio = colegio;
 			persona.lugarTrabajo = null;
-			return this;
+			return persona.new BuilderMenor(persona);
 		}
 	
 		public Persona build() {
@@ -106,6 +112,24 @@ public class Persona {
 		public Persona build(){
 			return persona;
 		}
+	}
+
+	public class BuilderMenor {
+		private Persona personaMenor = null;
+
+		private BuilderMenor(Persona persona){
+			personaMenor = persona;
+		}
+
+		public BuilderMenor setColegio(String colegio){
+			personaMenor.setColegio(colegio);
+			return this;
+		}
+
+		public Persona build(){
+			return personaMenor;
+		}
+
 	}
 	
 }
